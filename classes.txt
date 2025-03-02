@@ -1,0 +1,51 @@
+Adristyrannus
+Aleurocanthus spiniferus
+Ampelophaga
+Aphis citricola Vander Goot
+Apolygus lucorum
+Bactrocera tsuneonis
+Beet spot flies
+Black hairy
+Brevipoalpus lewisi McGregor
+Ceroplastes rubens
+Chlumetia transversa
+Chrysomphalus aonidum
+Cicadella viridis
+Cicadellidae
+Colomerus vitis
+Dacus dorsalis(Hendel)
+Dasineura sp
+Deporaus marginatus Pascoe
+Erythroneura apicalis
+Field Cricket
+Fruit piercing moth
+Gall fly
+Icerya purchasi Maskell
+Indigo caterpillar
+Jute Stem Weevil
+Jute aphid
+Jute hairy
+Jute red mite
+Jute semilooper
+Jute stem girdler
+Jute stick insect
+Lawana imitata Melichar
+Leaf beetle
+Limacodidae
+Locust
+Locustoidea
+Lycorma delicatula
+Mango flat beak leafhopper
+Mealybug
+Miridae
+Nipaecoccus vastalor
+Panonchus citri McGregor
+Papilio xuthus
+Parlatoria zizyphus Lucus
+Pest_Dataset
+Phyllocnistis citrella Stainton
+Phyllocoptes oleiverus ashmead
+Pieris canidia
+Pod borer
+Polyphagotars onemus latus
+Potosiabre vitarsis
