@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="{{ 'ta' if language == 'தமிழ்' else 'en' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ 'பூச்சி கண்டறிதல் மற்றும் பூச்சிக்கொல்லி பரிந்துரை அமைப்பு' if language == 'தமிழ்' else 'Pest Detection System and Pesticide Recommendation' }}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Google Fonts (Roboto) -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Page Fade-In/Out Effect */
+        .fade {
+            opacity: 0;
+            transition: opacity 2s ease-in-out; /* Increased transition duration to 2 seconds */
+        }
+
+        .fade.show {
+            opacity: 1;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif; /* Updated font */
+            background: url("{{ url_for('static', filename='images/th.png') }}") no-repeat center center fixed;
+            background-size: cover; /* Ensures the image covers the entire screen */
+            color: rgb(1, 1, 1); /* Sets text color for better contrast */
+            text-shadow: 1px 1px 5px rgb(255, 255, 255); /* Adds a subtle text shadow */
+            margin: 0; /* Removes any default body margin */
+            padding: 0;
+            overflow-x: hidden; /* Prevents horizontal scroll issues */
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Card Hover Effect */
+        .card {
+            transition: all 0.3s ease; /* Smooth transition for card */
+        }
+
+        .card:hover {
+            transform: translateY(-5px); /* Slight lift effect */
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3); /* Shadow effect on hover */
+        }
+
+        /* Button Hover Effect */
+        .btn-success:hover {
+            background-color: #28a745; /* Darker green on hover */
+            transform: scale(1.05); /* Slight button enlargement */
+            transition: all 0.3s ease; /* Smooth transition for hover effect */
+        }
+
+        /* Spinner Fade-in */
+        #spinner {
+            opacity: 0;
+            transition: opacity 1s ease-in-out; /* Increased spinner fade-in duration */
+        }
+
+        #spinner.show {
+            opacity: 1;
+        }
+
+        /* Flash Messages */
+        .alert {
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        /* Text Color Change on Hover */
+        h1:hover, h3:hover {
+            color: #28a745; /* Change color on hover */
+            transition: color 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">{{ 'பூச்சி கண்டறிதல் மற்றும் பூச்சிக்கொல்லி பரிந்துரை அமைப்பு' if language == 'தமிழ்' else 'Pest Detection System and Pesticide Recommendation System' }}</a>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <!-- Welcome Message -->
+        <h1 class="text-center fade show">{{ 'வணக்கம், ' + name if language == 'தமிழ்' else 'Welcome, ' + name }}</h1>
+        <h3 class="text-center mb-4 fade show">{{ 'உங்கள் விருப்ப மொழி: ' + language if language == 'தமிழ்' else 'Your Preferred Language: ' + language }}</h3>
+
+        <!-- Form for Image Upload -->
+        <div class="card shadow p-4 fade show">
+            <h3 class="text-center">{{ 'படத்தை பதிவேற்றவும்' if language == 'தமிழ்' else 'Upload an Image to Detect the Pest' }}</h3>
+            <form action="/predict" method="POST" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="file" class="form-label">{{ 'பிரதி படம் பதிவேற்றவும்:' if language == 'தமிழ்' else 'Upload an image of the pest:' }}</label>
+                    <input class="form-control" type="file" name="file" accept="image/*" required>
+                </div>
+                <!-- Add hidden input for language -->
+                <input type="hidden" name="language" value="{{ language }}">
+                <button type="submit" class="btn btn-success w-100">{{ 'அறிதல்' if language == 'தமிழ்' else 'Predict' }}</button>
+            </form>
+        </div>
+
+        <!-- Spinner for Prediction -->
+        <div id="spinner" class="text-center d-none mt-4">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">{{ 'ஊர்தலை காத்திருங்கள்...' if language == 'தமிழ்' else 'Loading...' }}</span>
+            </div>
+            <p>{{ 'உங்கள் படம் செயலாக்கப்படுகின்றது...' if language == 'தமிழ்' else 'Processing your image...' }}</p>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="alert alert-warning mt-4">
+                {{ messages[0] }}
+            </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Prediction Results -->
+        {% if pest_name %}
+        <div class="card shadow mt-4 p-4 result fade show">
+            <h2 class="text-center">{{ 'Prediction: ' + english_name + ' (' + tamil_name + ')' if language == 'English' else 'கணிப்பு: ' + tamil_name + ' (' + english_name + ')' }}</h2>
+            <hr>
+            <h3>{{ 'விளக்கம்:' if language == 'தமிழ்' else 'Description:' }}</h3>
+            <p>{{ tamil_description if language == 'தமிழ்' else english_description }}</p>
+            <h3>{{ 'முன்னேற்றம்:' if language == 'தமிழ்' else 'Prevention:' }}</h3>
+            <p>{{ tamil_prevention if language == 'தமிழ்' else english_prevention }}</p>
+            <h3>{{ 'பரிசோதனை பரிந்துரை:' if language == 'தமிழ்' else 'Pesticide Recommendation:' }}</h3>
+            <p>{{ tamil_pesticide if language == 'தமிழ்' else pesticide_name }}</p>
+            <p>{{ tamil_pesticide_description if language == 'தமிழ்' else pesticide_description }}</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        {{ '© 2025 பூச்சி கண்டறிதல் மற்றும் பூச்சிக்கொல்லி பரிந்துரை அமைப்பு' if language == 'தமிழ்' else '© 2025 Pest Detection System' }}. Better crops, Better nation
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Show spinner when form is submitted
+        const form = document.querySelector("form");
+        form.addEventListener("submit", () => {
+            document.getElementById("spinner").classList.remove("d-none");
+            document.getElementById("spinner").classList.add("show");
+        });
+    </script>
+</body>
+</html>
